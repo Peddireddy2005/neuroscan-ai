@@ -1,0 +1,9 @@
+{
+  "accuracy": 0.9137931034482759,
+  "correct": 212,
+  "n_test": 232,
+  "name": "CLDNN (CNN + BiLSTM + attention)",
+  "description": "Raw 19-channel 8 s epochs",
+  "input": "raw8",
+  "pooling": "prob"
+}

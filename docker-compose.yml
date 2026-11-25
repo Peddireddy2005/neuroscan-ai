@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: neuroscan
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: neuroscan
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U neuroscan"], interval: 5s, retries: 10 }
+  web:
+    build: .
+    restart: unless-stopped
+    ports: ["8000:8000"]
+    depends_on: { db: { condition: service_healthy } }
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://neuroscan:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/neuroscan
+      SECRET_KEY: ${SECRET_KEY:?Set SECRET_KEY in .env}
+
+volumes: { pgdata: {} }

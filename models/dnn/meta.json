@@ -1,0 +1,9 @@
+{
+  "accuracy": 0.9439655172413793,
+  "correct": 219,
+  "n_test": 232,
+  "name": "DNN (spectral features)",
+  "description": "Residual MLP on 152 spectral features per 8 s epoch",
+  "input": "feat152",
+  "pooling": "prob"
+}

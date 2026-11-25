@@ -1,0 +1,21 @@
+{
+ "name": "neuroscan-api",
+ "private": true,
+ "type": "module",
+ "engines": {
+  "node": ">=22"
+ },
+ "scripts": {
+  "start": "node --env-file-if-exists=../.env server.js",
+  "dev": "node --watch --env-file-if-exists=../.env server.js"
+ },
+ "dependencies": {
+  "better-sqlite3": "^11.5.0",
+  "express": "^5.0.1",
+  "express-rate-limit": "^7.4.1",
+  "jsonwebtoken": "^9.0.2",
+  "multer": "^2.0.0",
+  "onnxruntime-node": "^1.20.0",
+  "pg": "^8.13.0"
+ }
+}
