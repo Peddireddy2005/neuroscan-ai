@@ -6,8 +6,8 @@
   "node": ">=22"
  },
  "scripts": {
-  "start": "node --env-file-if-exists=../.env server.js",
-  "dev": "node --watch --env-file-if-exists=../.env server.js"
+  "start": "node --env-file-if-exists=../.env --env-file-if-exists=../.env.local server.js",
+  "dev": "node --watch --env-file-if-exists=../.env --env-file-if-exists=../.env.local server.js"
  },
  "dependencies": {
   "better-sqlite3": "^11.5.0",
