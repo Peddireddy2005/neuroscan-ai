@@ -94,7 +94,6 @@ const registry = () => !fs.existsSync(MODELS) ? [] : fs.readdirSync(MODELS).filt
   const dir = path.join(MODELS, d), members = fs.readdirSync(dir).filter(f => f.endsWith('.onnx')).sort();
   return members.length ? { ...read(path.join(dir, 'meta.json')), id: d, dir, members } : null;
 }).filter(Boolean);
-const sessions = {}, session = f => (sessions[f] ??= ort.InferenceSession.create(f, { intraOpNumThreads: 1, interOpNumThreads: 1 }));
 
 app.get('/api/health', async (q, r) => { await get('select 1 as ok'); r.json({ status: 'ok', database: kind, models: registry().length }); });
 app.get('/api/models', (q, r) => r.json(registry().map(({ id, name, description, accuracy, members }) => ({ id, name, description, accuracy, members: members.length }))));
@@ -127,15 +126,34 @@ const INPUTS = { // what each model family consumes (see backend/eeg.js)
 };
 async function runModel(m, P, memo, step) { // -> P(Alzheimer) averaged over epochs and ensemble members
   const { data, n, shape } = subsample(INPUTS[m.input](P, memo), m.max_epochs), row = shape.reduce((a, b) => a * b), vals = [];
-  for (const f of m.members) {
-    const s = await session(path.join(m.dir, f)); let sum = 0;
-    for (let i = 0; i < n; i += 64) {
-      const k = Math.min(64, n - i);
-      const o = await s.run({ [s.inputNames[0]]: new ort.Tensor('float32', data.slice(i * row, (i + k) * row), [k, ...shape]) });
-      const t = o[s.outputNames[0]].data, w = t.length / k;
-      for (let j = 0; j < k; j++) sum += t[j * w + (w === 2 ? 1 : 0)]; // column 1 = P(Alzheimer's); single column = SVM decision value
+  // Keep native inference memory bounded while evaluating every checkpoint.
+  const batchSize = 4;
+  for (const filename of m.members) {
+    const session = await ort.InferenceSession.create(path.join(m.dir, filename), {
+      intraOpNumThreads: 1,
+      interOpNumThreads: 1,
+      enableCpuMemArena: false,
+      enableMemPattern: false,
+    });
+    let sum = 0;
+    try {
+      for (let offset = 0; offset < n; offset += batchSize) {
+        const count = Math.min(batchSize, n - offset);
+        const values = data.subarray(offset * row, (offset + count) * row);
+        const input = new ort.Tensor('float32', values, [count, ...shape]);
+        const outputs = await session.run({ [session.inputNames[0]]: input });
+        const predictions = outputs[session.outputNames[0]].data;
+        const width = predictions.length / count;
+        for (let j = 0; j < count; j++) {
+          sum += predictions[j * width + (width === 2 ? 1 : 0)];
+        }
+      }
+    } finally {
+      await session.release();
     }
-    vals.push(sum / n); step?.();
+    vals.push(sum / n);
+    step?.();
+    await new Promise(resolve => setImmediate(resolve));
   }
   const v = vals.reduce((a, b) => a + b, 0) / vals.length;
   return m.pooling === 'decision' ? 1 / (1 + Math.exp(-v)) : v;
