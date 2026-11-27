@@ -193,7 +193,7 @@ app.post('/api/predict', auth, upload.array('files', 40), (req, res) => {
   if (!req.files?.length) throw E(422, 'No file uploaded');
   if (+req.body.fs && +req.body.fs !== FS) throw E(422, `The models need ${FS} Hz recordings. Resample your data to ${FS} Hz first.`);
   let rec;
-  try { rec = loadRecording(req.files.map(f => ({ name: path.basename(f.originalname), buffer: f.buffer }))); if (rec.n < 8 * FS) throw new Error('Recording too short: at least 8 seconds (1024 samples at 128 Hz) are required'); }
+  try { rec = loadRecording(req.files.map(f => ({ name: path.basename(f.originalname), buffer: f.buffer }))); if (rec.n < 8 * FS) throw new Error('Recording too short: at least 1,024 samples per channel at 128 Hz are required'); }
   catch (e) { throw E(422, e.message); }
   const id = crypto.randomUUID(), job = { uid: req.uid, status: 'queued', progress: 0, created: Date.now() };
   const alias = (typeof req.body.name === 'string' ? req.body.name : '').trim().slice(0, 100);

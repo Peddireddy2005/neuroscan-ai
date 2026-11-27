@@ -25,7 +25,7 @@ export default function Report({report, archived=false}) {
       <dl className="record-stats">{[['Recording length',report.duration_s+' s'],['Channels',report.channels],['Sampling rate',report.sample_rate+' Hz']].map(([k,v])=><div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
       <h3>Model findings</h3>
       <p className="report-note">Each bar shows the average AD-class score for a model family. Values above 50% indicate the AD-like pattern.</p>
-      {findings.map(v=><div className="finding-row" key={v.model}><div><strong>{v.model === 'SVM + SPEC features' ? 'Classical ML' : v.model}</strong><small>{v.members} checkpoints</small></div><div><b>{resultName(v.label)}</b><div className="finding-meter"><i style={{width:(100*v.score)+'%'}}/></div><small>Class score {(v.score*100).toFixed(1)}%</small></div></div>)}
+      {findings.map(v=><div className="finding-row" key={v.model}><div><strong>{v.model === 'SVM + SPEC features' ? 'Classical ML' : v.model?.replace(/^CNN2 \(1 s raw epochs\)$/, 'CNN2')}</strong><small>{v.members} checkpoints</small></div><div><b>{resultName(v.label)}</b><div className="finding-meter"><i style={{width:(100*v.score)+'%'}}/></div><small>Class score {(v.score*100).toFixed(1)}%</small></div></div>)}
       {report.warnings.map(w=><p key={w} className="pill warn">{w}</p>)}
       <div className="row noprint"><button className="btn g" onClick={()=>window.print()}>Print report / PDF</button>{!archived&&<Link className="btn g" to="/history">View saved reports</Link>}</div>
     </div>

@@ -11,7 +11,7 @@ const load=async list=>{if(job)return;setName('');setErr('');setRes(null);setJob
  let files,info=null;
  if(list.length===1){files=list}else{info=matchChannels(list);setSel({info,files:null});if(info.missing.length||info.dups.length)return;files=CHANNELS.map(c=>info.found[c])}
  if(files.some(f=>f.size>60e6))throw Error('A file is larger than 60 MB.');
- const d=await readRecording(files);if(d.n<8*FS)throw Error('Recording too short: at least 8 s (1024 samples at 128 Hz) required.');
+ const d=await readRecording(files);if(d.n<8*FS)throw Error('Recording too short: at least 1,024 samples per channel at 128 Hz are required.');
  setD(d);setCh(0);setSel({info,files})}catch(e){setErr(e.message)}};
 const drop=e=>{e.preventDefault();const en=[...e.dataTransfer.items].map(i=>i.webkitGetAsEntry?.()).filter(Boolean);
  (en.length?filesFromEntries(en):Promise.resolve([...e.dataTransfer.files])).then(load)};

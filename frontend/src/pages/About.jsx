@@ -5,16 +5,16 @@ export default function About(){return <section className="page on"><h2 style={{
 <div className="card"><div className="k">Intended use</div><p>Research, education and method demonstration. It is <b>not a medical device</b> and must not be used to diagnose, rule out or monitor any condition. Clinical decisions need a qualified clinician and a full evaluation.</p></div></div>
 <h2>How an analysis works</h2><div className="steps">
 <Step n="1" t="Upload" d="You provide one recording: its 19 channel files in a folder, or a single CSV."/>
-<Step n="2" t="Validation" d="The site checks that all 19 channels are present, contain numbers, and the recording is at least 8 s long at 128 Hz."/>
+<Step n="2" t="Validation" d="The site checks that all 19 channels are present, contain numbers, and the recording is at least 1,024 samples long per channel at 128 Hz."/>
 <Step n="3" t="Filtering" d="Each channel is band-pass filtered from 0.5 to 45 Hz (zero-phase) and standardised."/>
-<Step n="4" t="Segmentation" d="The signal is cut into short non-overlapping windows (1 s and 8 s)."/>
+<Step n="4" t="Segmentation" d="The signal is cut into short non-overlapping windows."/>
 <Step n="5" t="Analysis" d="Several independently trained models score every window, in the background on the server."/>
 <Step n="6" t="Result" d="Window scores are averaged per model, then combined into one result with an agreement count."/></div>
 <h2>Input requirements</h2><div className="card"><ul>
 <li><b>19 channels</b> of the standard 10–20 layout: Fp1, Fp2, F3, F4, F7, F8, Fz, C3, C4, Cz, P3, P4, Pz, T3, T4, T5, T6, O1, O2. The newer names T7, T8, P7, P8 are accepted for T3, T4, T5, T6.</li>
 <li><b>128 Hz</b> sampling rate. The models were trained at this rate, so other rates are rejected rather than guessed.</li>
 <li><b>Format:</b> one text file of numbers per channel (named after the channel, for example Fp1.txt), or a single CSV with one column per channel.</li>
-<li><b>Length:</b> at least 8 s. A minute or more is recommended, because more windows give a more stable result.</li>
+<li><b>Length:</b> at least 1,024 samples per channel. A minute or more is recommended, because more windows give a more stable result.</li>
 <li>One recording at a time. A folder holding several recordings is rejected.</li></ul></div>
 <h2>Reading the result</h2><div className="card"><ul>
 <li>Each family contributes one classification. An even split produces an inconclusive result.</li>

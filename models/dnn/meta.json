@@ -3,7 +3,7 @@
   "correct": 219,
   "n_test": 232,
   "name": "DNN (spectral features)",
-  "description": "Residual MLP on 152 spectral features per 8 s epoch",
+  "description": "Residual MLP on 152 spectral features per epoch",
   "input": "feat152",
   "pooling": "prob"
 }

@@ -2,7 +2,7 @@
   "accuracy": 0.9008620689655172,
   "correct": 209,
   "n_test": 232,
-  "name": "CNN2 (1 s raw epochs)",
+  "name": "CNN2",
   "description": "2-D CNN on 128 x 19 raw epochs",
   "input": "raw1",
   "pooling": "prob",

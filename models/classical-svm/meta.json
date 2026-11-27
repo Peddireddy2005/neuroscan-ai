@@ -3,7 +3,7 @@
   "correct": 218,
   "n_test": 232,
   "name": "SVM + SPEC features",
-  "description": "RBF SVM on 247 spectral/Hjorth features per 8 s epoch",
+  "description": "RBF SVM on 247 spectral/Hjorth features per epoch",
   "input": "spec247",
   "pooling": "decision",
   "max_epochs": 100

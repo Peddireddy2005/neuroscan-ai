@@ -3,7 +3,7 @@
   "correct": 212,
   "n_test": 232,
   "name": "CLDNN (CNN + BiLSTM + attention)",
-  "description": "Raw 19-channel 8 s epochs",
+  "description": "Raw 19-channel epochs",
   "input": "raw8",
   "pooling": "prob"
 }
