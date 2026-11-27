@@ -25,5 +25,5 @@ return <Ctx.Provider value={{user,setUser,restoring}}><BrowserRouter>
 {user?<button className="btn g" onClick={out} disabled={signingOut}>{signingOut?'Signing out…':'Sign out'}</button>:<Link className="btn p" to="/login">Sign in</Link>}</header>
 <main>{logoutError&&<p className="pill bad" role="alert">{logoutError}</p>}
 <Routes><Route path="/" element={<Home/>}/><Route path="/analyze" element={<Analyze/>}/><Route path="/compare" element={<Compare/>}/><Route path="/history" element={<History/>}/><Route path="/about" element={<About/>}/><Route path="/login" element={<AuthPage key="login"/>}/><Route path="/signup" element={<AuthPage key="signup" register/>}/></Routes>
-<div className="disc"><b>Research use only.</b> Results are AI-generated research predictions based on the uploaded EEG recording. They are not a medical diagnosis and are no substitute for professional neurological evaluation.</div></main>
+</main>
 </BrowserRouter></Ctx.Provider>}

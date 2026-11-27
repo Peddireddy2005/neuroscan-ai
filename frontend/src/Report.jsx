@@ -27,7 +27,6 @@ export default function Report({report, archived=false}) {
       <p className="report-note">Each bar shows the average AD-class score for a model family. Values above 50% indicate the AD-like pattern.</p>
       {findings.map(v=><div className="finding-row" key={v.model}><div><strong>{v.model === 'SVM + SPEC features' ? 'Classical ML' : v.model}</strong><small>{v.members} checkpoints</small></div><div><b>{resultName(v.label)}</b><div className="finding-meter"><i style={{width:(100*v.score)+'%'}}/></div><small>Class score {(v.score*100).toFixed(1)}%</small></div></div>)}
       {report.warnings.map(w=><p key={w} className="pill warn">{w}</p>)}
-      <p className="report-note">For research use only.</p>
       <div className="row noprint"><button className="btn g" onClick={()=>window.print()}>Print report / PDF</button>{!archived&&<Link className="btn g" to="/history">View saved reports</Link>}</div>
     </div>
   </article>;

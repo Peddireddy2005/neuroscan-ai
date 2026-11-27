@@ -62,7 +62,6 @@ export default function AuthPage({ register = false }) {
             <path d="M0 53L10 55L18 49L28 55L38 46L47 53L55 48L62 57L72 51L80 59L89 45L97 55L108 52L116 62L125 47L135 53L143 30L150 74L160 44L170 55L182 50L194 57L205 46L213 51L224 42L233 55L242 47L251 63L259 53L268 57L277 46L286 51L295 27L303 78L313 40L322 56L331 48L341 57L351 49L361 54L372 44L381 57L391 48L400 52" stroke="#64ecd8" strokeWidth="2" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
           </svg>
         </div>
-        <p className="auth-research">For research use only</p>
       </aside>
 
       <div className="auth-content">
