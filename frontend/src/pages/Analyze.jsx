@@ -1,7 +1,7 @@
 import {useEffect,useRef,useState} from 'react';import {Link} from 'react-router-dom';import {api} from '../api';import {useAuth} from '../auth';
-import {CHANNELS,matchChannels,readRecording,filesFromEntries,bandPct} from '../signal';
+import {CHANNELS,matchChannels,readRecording,filesFromEntries} from '../signal';
 import Report from '../Report';
-const FS=128,Bar=([n,v])=><div key={n} style={{display:'grid',gridTemplateColumns:'110px 1fr 56px',gap:10,alignItems:'center',margin:'6px 0'}}><b>{n}</b><div className="bar"><i style={{width:v+'%'}}/></div><span>{v.toFixed(1)}%</span></div>;
+const FS=128;
 export default function Analyze(){const{user}=useAuth(),cv=useRef(),fi=useRef(),fo=useRef(),alive=useRef(true);
 const [name,setName]=useState('');
 const[sel,setSel]=useState(null),[D,setD]=useState(null),[err,setErr]=useState(''),[ch,setCh]=useState(0),[zoom,setZoom]=useState(60),[pos,setPos]=useState(0),[job,setJob]=useState(null),[res,setRes]=useState(null),[n,setN]=useState(null);
@@ -15,7 +15,7 @@ const load=async list=>{if(job)return;setName('');setErr('');setRes(null);setJob
  setD(d);setCh(0);setSel({info,files})}catch(e){setErr(e.message)}};
 const drop=e=>{e.preventDefault();const en=[...e.dataTransfer.items].map(i=>i.webkitGetAsEntry?.()).filter(Boolean);
  (en.length?filesFromEntries(en):Promise.resolve([...e.dataTransfer.files])).then(load)};
-const w=D?Math.max(50,Math.round(D.n*(.02+zoom/100*.98))):0,s=D?Math.round((D.n-w)*pos/100):0,bands=D?bandPct(D.ch[ch],s,w,FS):null;
+const w=D?Math.max(50,Math.round(D.n*(.02+zoom/100*.98))):0,s=D?Math.round((D.n-w)*pos/100):0;
 useEffect(()=>{if(!D)return;const c=cv.current,d=devicePixelRatio||1,W=c.clientWidth,H=c.clientHeight;c.width=W*d;c.height=H*d;const g=c.getContext('2d');g.scale(d,d);const x=D.ch[ch];let mn=1e99,mx=-1e99;
 for(let i=s;i<s+w;i++){mn=Math.min(mn,x[i]);mx=Math.max(mx,x[i])}if(mx===mn)mx=mn+1;g.strokeStyle='#2563EB';g.lineWidth=1.3;g.beginPath();const st=Math.max(1,Math.floor(w/(W*2)));
 for(let i=0;i<w;i+=st){const px=4+(W-8)*i/w,py=10+(H-26)*(1-(x[s+i]-mn)/(mx-mn));i?g.lineTo(px,py):g.moveTo(px,py)}g.stroke();
@@ -39,7 +39,7 @@ return <section className="page on"><h2 style={{marginTop:0}}>Upload EEG Recordi
 {D.warn&&<div className="pill warn" style={{marginTop:10}}>{D.warn}</div>}
 <div className="card" style={{marginTop:16}}><div className="row"><label>Channel <select value={ch} onChange={e=>setCh(+e.target.value)}>{D.names.map((x,i)=><option key={i} value={i}>{x}</option>)}</select></label>
 <label>Window <input type="range" value={zoom} onChange={e=>setZoom(+e.target.value)}/></label><label>Position <input type="range" value={pos} onChange={e=>setPos(+e.target.value)}/></label></div><canvas className="eeg" ref={cv}/></div>
-<div className="card" style={{marginTop:16}}><b>Relative band power (selected window)</b>{bands?bands.map(b=>Bar(b)):<div className="sub">Window too short for spectral analysis.</div>}</div></>}
+</>}
 <h2>Analysis</h2><div className="card">{!user?<p>Please <Link to="/login"><b>sign in</b></Link> to analyze a recording.</p>:n===0?<div className="pill warn">The analysis models are not installed on the server yet (see README, step 1).</div>:
 <div>{ok&&<label className="record-label">Recording label <small>(optional)</small><input maxLength={100} value={name} disabled={busy} placeholder="e.g. Study 04, baseline" onChange={e=>setName(e.target.value)}/></label>}<div className="row"><span>{ok?'Recording is valid and ready.':'Select a valid recording to begin.'}</span><button className="btn p" disabled={!ok||busy||!n} onClick={run}>{busy?'Analyzing…':'Analyze EEG Signal'}</button></div></div>}
 {busy&&<div style={{marginTop:14}}><div className="bar"><i style={{width:Math.max(4,(job.progress||0)*100)+'%'}}/></div><div className="sub" style={{margin:'6px 0 0'}}>{job.status==='queued'?'Waiting for the analysis to start…':`Analyzing the recording in the background… ${Math.round((job.progress||0)*100)}%`} You can keep this page open.</div></div>}</div>
