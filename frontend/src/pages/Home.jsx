@@ -29,7 +29,7 @@ export default function Home() {
     {problem && <p role="alert">{problem}</p>}
     <div className="workspace-panels"><section className="card"><h2>Model inventory</h2><p className="sub">Checkpoints available for analysis</p>
     {models?.map(m => <div className="inventory-line" key={m.id}><strong>{m.name}</strong><span>{m.members} checkpoints</span></div>)}
-    {!models && !problem && <p>Loading models…</p>}<Link to="/compare">View training benchmarks →</Link></section>
+    {!models && !problem && <p>Loading models…</p>}<Link to="/compare">View BTP evaluation results →</Link></section>
     <section className="card"><h2>Latest report</h2>{latest ? <><p>{dateLabel(latest.date)}</p><h3>{latest.name}</h3><p>{resultName(latest.cls?.split(' (')[0])}</p><Link to={'/history?report='+latest.id}>Open report →</Link></> :
     <><p>{user ? history ? 'Completed analyses appear here and in your report archive.' : 'Loading reports…' : 'Sign in to access your recording history and saved findings.'}</p><Link to={user?'/analyze':'/login'}>{user?'Start an analysis':'Sign in'} →</Link></>}</section></div>
   </section>;

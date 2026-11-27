@@ -19,9 +19,8 @@ export default function About(){return <section className="page on"><h2 style={{
 <h2>Reading the result</h2><div className="card"><ul>
 <li>Each family contributes one classification. An even split produces an inconclusive result.</li>
 <li>Scores near the 50% threshold indicate a small margin between classes.</li></ul></div>
-<h2>Validation and performance</h2><div className="card"><p>The models were evaluated with <b>subject-level cross-validation on 232 subjects</b>: no person appears in both the training and the test data. Individually, the models reached roughly <b>90% to 94% accuracy</b>. Two points matter when you read this:</p><ul>
-<li>The combined result shown by this site has <b>not been evaluated as a separate system</b>.</li>
-<li>These figures come from one dataset. Accuracy on other hospitals, devices, age groups or recording protocols is unknown and is likely to be lower.</li></ul></div>
+<h2>Validation and performance</h2><div className="card"><p>The BTP evaluation included 232 participants. The training set had 80 participants per group and the test set had 36 per group. On the test set, CNN classified 70 of 72 correctly, DNN classified 68, and CLDNN classified 66.</p>
+<p>The earlier XGBoost evaluation reported 99.01% accuracy on a different class split. The combined website classification has no separately measured accuracy.</p></div>
 <h2>Limitations</h2><div className="card"><ul>
 <li>The system answers a two-way question, healthy controls versus Alzheimer’s disease. It cannot recognise other dementias, mild cognitive impairment or other conditions, and will still force a recording into one of the two groups.</li>
 <li>With a modest number of subjects, results can be unstable and some people will be misclassified in both directions.</li>
